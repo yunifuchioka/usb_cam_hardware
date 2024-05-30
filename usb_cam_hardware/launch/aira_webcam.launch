@@ -1,0 +1,59 @@
+<launch>
+
+  <arg name="image_width" default="360"/>
+  <arg name="image_height" default="360"/>
+  <arg name="framerate" default="20"/>
+  <arg name="skip" default="2"/>
+
+  <group ns="usb_cam">
+    <node name="hardware" pkg="nodelet" type="nodelet" 
+          args="standalone usb_cam_hardware/USBCamHardware" output="screen">
+      <remap from="compressed_packet_controller/packet" to="packet/compressed"/>
+      <param name="video_device" value="/dev/video0"/>
+      <param name="image_width" value="$(arg image_width)"/>
+      <param name="image_height" value="$(arg image_height)"/>
+      <param name="pixel_format" value="mjpeg"/>
+      <param name="framerate" value="$(arg framerate)"/>
+    </node>
+    <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
+          args="spawn compressed_packet_controller" output="screen"/>
+    <param name="compressed_packet_controller/type" value="usb_cam_controllers/CompressedPacketController"/>
+    <param name="compressed_packet_controller/format" value="h264"/>
+    <param name="compressed_packet_controller/skip" value="$(arg skip)"/>
+  </group>
+
+  <group ns="usb_cam2">
+    <node name="hardware" pkg="nodelet" type="nodelet" 
+          args="standalone usb_cam_hardware/USBCamHardware" output="screen">
+      <remap from="compressed_packet_controller/packet" to="packet/compressed"/>
+      <param name="video_device" value="/dev/video2"/>
+      <param name="image_width" value="$(arg image_width)"/>
+      <param name="image_height" value="$(arg image_height)"/>
+      <param name="pixel_format" value="mjpeg"/>
+      <param name="framerate" value="$(arg framerate)"/>
+    </node>
+    <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
+          args="spawn compressed_packet_controller" output="screen"/>
+    <param name="compressed_packet_controller/type" value="usb_cam_controllers/CompressedPacketController"/>
+    <param name="compressed_packet_controller/format" value="h264"/>
+    <param name="compressed_packet_controller/skip" value="$(arg skip)"/>
+  </group>
+
+  <group ns="usb_cam3">
+    <node name="hardware" pkg="nodelet" type="nodelet" 
+          args="standalone usb_cam_hardware/USBCamHardware" output="screen">
+      <remap from="compressed_packet_controller/packet" to="packet/compressed"/>
+      <param name="video_device" value="/dev/video4"/>
+      <param name="image_width" value="$(arg image_width)"/>
+      <param name="image_height" value="$(arg image_height)"/>
+      <param name="pixel_format" value="mjpeg"/>
+    <param name="compressed_packet_controller/skip" value="$(arg skip)"/>
+    </node>
+    <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
+          args="spawn compressed_packet_controller" output="screen"/>
+    <param name="compressed_packet_controller/type" value="usb_cam_controllers/CompressedPacketController"/>
+    <param name="compressed_packet_controller/format" value="h264"/>
+    <param name="compressed_packet_controller/skip" value="2"/>
+  </group>
+
+</launch>
