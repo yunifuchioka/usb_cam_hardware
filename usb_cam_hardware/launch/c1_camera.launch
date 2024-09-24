@@ -1,0 +1,35 @@
+<launch>
+
+  <arg name="image_width" default="1920"/>
+  <arg name="image_height" default="1080"/>
+  <arg name="framerate" default="20"/>
+  <arg name="skip" default="5"/>
+
+  <group ns="usb_cam">
+    <node name="hardware" pkg="nodelet" type="nodelet" 
+          args="standalone usb_cam_hardware/USBCamHardware" output="screen">
+      <!--<remap from="packet_controller/packet" to="packet/compressed"/>-->
+      <param name="video_device" value="/dev/video0"/>
+      <param name="image_width" value="$(arg image_width)"/>
+      <param name="image_height" value="$(arg image_height)"/>
+      <param name="pixel_format" value="uyvy"/>
+      <param name="framerate" value="$(arg framerate)"/>
+    </node>
+  <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
+          args="spawn camera_info_controller packet_controller uyvy_controller" output="screen"/>
+    <!-- Recommendation: use controllers you actually required -->
+    <!--   camera_info_controller publishes camera infos synchronized with images -->
+    <!--   packet_controller publishes packets from the camera -->
+    <!--   yuyv_controller does server-side formatting (YUYV to BGR) and publishes images -->
+    
+    <!-- Parameters for controllers -->
+    <param name="packet_controller/type" value="usb_cam_controllers/PacketController"/>
+    <param name="packet_controller/format" value="uyvy"/>
+
+    <param name="uyvy_controller/type" value="usb_cam_controllers/UYVYController"/>
+    <param name="uyvy_controller/image_width" value="1920"/>
+    <param name="uyvy_controller/image_height" value="1080"/>
+
+
+  </group>
+</launch>
