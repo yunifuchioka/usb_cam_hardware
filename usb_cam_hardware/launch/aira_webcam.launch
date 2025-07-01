@@ -16,10 +16,12 @@
       <param name="framerate" value="$(arg framerate)"/>
     </node>
     <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
-          args="spawn compressed_packet_controller" output="screen"/>
+          args="spawn compressed_packet_controller mjpeg_controller" output="screen"/>
     <param name="compressed_packet_controller/type" value="usb_cam_controllers/CompressedPacketController"/>
     <param name="compressed_packet_controller/format" value="h264"/>
     <param name="compressed_packet_controller/skip" value="$(arg skip)"/>
+
+    <param name="mjpeg_controller/type" value="usb_cam_controllers/MjpegController"/>
   </group>
 
   <group ns="usb_cam2">
@@ -33,10 +35,12 @@
       <param name="framerate" value="$(arg framerate)"/>
     </node>
     <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
-          args="spawn compressed_packet_controller" output="screen"/>
+          args="spawn compressed_packet_controller mjpeg_controller" output="screen"/>
     <param name="compressed_packet_controller/type" value="usb_cam_controllers/CompressedPacketController"/>
     <param name="compressed_packet_controller/format" value="h264"/>
     <param name="compressed_packet_controller/skip" value="$(arg skip)"/>
+
+    <param name="mjpeg_controller/type" value="usb_cam_controllers/MjpegController"/>
   </group>
 
   <group ns="usb_cam3">
@@ -50,10 +54,12 @@
     <param name="compressed_packet_controller/skip" value="$(arg skip)"/>
     </node>
     <node name="controller_starter" pkg="controller_manager" type="controller_manager" 
-          args="spawn compressed_packet_controller" output="screen"/>
+          args="spawn compressed_packet_controller mjpeg_controller" output="screen"/>
     <param name="compressed_packet_controller/type" value="usb_cam_controllers/CompressedPacketController"/>
     <param name="compressed_packet_controller/format" value="h264"/>
     <param name="compressed_packet_controller/skip" value="2"/>
+
+    <param name="mjpeg_controller/type" value="usb_cam_controllers/MjpegController"/>
   </group>
 
 </launch>
