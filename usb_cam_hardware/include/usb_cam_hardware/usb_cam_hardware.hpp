@@ -101,25 +101,29 @@ public:
     }
 
     // set framerate
-    ros::Duration time_per_frame;
-    {
-      v4l2_streamparm streamparm;
-      std::memset(&streamparm, 0, sizeof(streamparm));
-      streamparm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-      if (xioctl(fd_, VIDIOC_G_PARM, &streamparm) < 0) {
-        ROS_ERROR("Cannot get streaming parameters");
-        return ros::Duration(-1.);
-      }
-      v4l2_fract &timeperframe(streamparm.parm.capture.timeperframe);
-      timeperframe.numerator = 1;
-      timeperframe.denominator = param_nh.param("framerate", 30);
-      if (xioctl(fd_, VIDIOC_S_PARM, &streamparm) < 0) {
-        ROS_ERROR("Cannot set framerate");
-        return ros::Duration(-1.);
-      }
-      time_per_frame =
-          ros::Duration(static_cast< double >(timeperframe.numerator) / timeperframe.denominator);
-    }
+    // ros::Duration time_per_frame;
+    // {
+    //   v4l2_streamparm streamparm;
+    //   std::memset(&streamparm, 0, sizeof(streamparm));
+    //   streamparm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    //   if (xioctl(fd_, VIDIOC_G_PARM, &streamparm) < 0) {
+    //     ROS_ERROR("Cannot get streaming parameters"); // Or more detailed errno
+    //     return ros::Duration(-1.);
+    //   }
+    //   v4l2_fract &timeperframe(streamparm.parm.capture.timeperframe);
+    //   timeperframe.numerator = 1;
+    //   timeperframe.denominator = param_nh.param("framerate", 30);
+    //   if (xioctl(fd_, VIDIOC_S_PARM, &streamparm) < 0) {
+    //     ROS_ERROR("Cannot set framerate");
+    //     return ros::Duration(-1.);
+    //   }
+    //   time_per_frame =
+    //     ros::Duration(static_cast< double >(timeperframe.numerator) / timeperframe.denominator);
+    // }
+
+    // HACK: hard code to the framerate set by the tier 4 jetson capture card driver
+    // use the block above for a usb webcam
+    ros::Duration time_per_frame = ros::Duration(1.0 / 30.0);
 
     // allocate buffers
     // TODO: support not only mmap, but also userp and read
